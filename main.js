@@ -46,37 +46,14 @@ export async function ambilDaftarBarang() {
   return hasilKueri;
 }
 
-export async function tambahBarang(item, harga, jumlah) {
-  try {
-    // menyimpan data ke firebase
-    const refDokumen = await addDoc(collection(basisdata, "inventory"), {
-      item: item,
-      harga: harga,
-      jumlah: jumlah
-    })
-    
-        // menampilkan pesan berhasil
-    console.log('berhasil menyimpan data barang')
-  } catch (error) {
-    // menampilkan pesan gagal 
-    console.log('gagal menyimpan data barang' + error)
-  }
-}
-
-export async function hapusBarang(id) {
-  await deleteDoc(doc(basisdata, "inventory", id))
-}
-
-export async function ubahBarang(id, itembaru, hargabaru, jumlahbaru) {
-  await updateDoc(
-    doc(basisdata, "inventory", id), 
-    { item: itembaru, harga: hargabaru, jumlah: jumlahbaru }
-    )
-}
+// menambah barang ke keranjang 
+export async function tambahBarangKeKeranjang(
+  idbarang,
+  nama,
+  harga,
+  jumlah,
+  idpelanggan,
+  namapelanggan
+  ) {
   
-export async function ambilBarang(id) {
-  const refDokumen = await doc(basisdata, "inventory", id)
-  const snapshotDokumen = await getDoc(refDokumen)
-
-  return await snapshotDokumen.data()
-}    
+}
