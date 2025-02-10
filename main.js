@@ -85,6 +85,7 @@ export async function ambilDaftarBarangDiKeranjang() {
     hasilKueri.push({
       id: dokumen.id,
       item: dokumen.data().item,
+      nama: dokumen.data().nama,
       jumlah: dokumen.data().jumlah,
       harga: dokumen.data().harga
     })
