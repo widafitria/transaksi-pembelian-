@@ -11,25 +11,13 @@
 
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
+
 <body class="m-3">
   <h1 class="text-center">Toko Incer</h1>
-
-  <h3>Pilih Barang</h3>
-
-  <table class="table table-striped-columns table-bordered border-success" id="daftar-barang">
-    <thead class="table-danger">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Item</th>
-        <th scope="col">Harga</th>
-        <th scope="col">Masukkan keranjang</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-
-  <h3>Keranjang Belanja</h3>
+  
+  <a href="index.html">Back to Daftar Barang</a>
+    <h3>Keranjang Belanja</h3>
+    
   <table class="table table-striped-columns table-bordered border-success" id="daftar-keranjang">
     <thead class="table-danger">
       <tr>
@@ -43,14 +31,27 @@
     <tbody>
     </tbody>
   </table>
-  <a href="pelanggan.html" class="btn btn-primary">Pilih Pelanggan</a>
-
+  
+  <h3>Daftar Pelanggan</h3>
+    <table class="table table-striped-columns table-bordered border-success" id="daftar-pelanggan">
+    <thead class="table-primary">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nama</th>
+        <th scope="col">No HP</th>
+        <th scope="col">Alamat</th>
+        <th scope="col">Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  
   <script type="module">
-    import { ambilDaftarBarang, tambahBarangKeKeranjang, ambilDaftarBarangDiKeranjang, hapusBarangDariKeranjang } from './main.js';
-
-//menampilkan daftar barang
+  import { ambilDaftarBarangDiKeranjang, hapusBarangDariKeranjang, ambilDaftarPelanggan } from './main.js';
+  
     $(document).ready(async function() {
-      async function tampilBarangDiKeranjang() {
+            async function tampilBarangDiKeranjang() {
      //menampilkan data barang yang ada di keranjang
          let elemenDaftarBarangDiKeranjang = $("#daftar-keranjang > tbody")
          let daftarBarangDiKeranjang = await ambilDaftarBarangDiKeranjang()
@@ -75,51 +76,38 @@
          // selesai menampilkan barang di keranjang
       }
       
-      // menampilkan daftar barang di inventory
-      let elemenDaftarBarang = $("#daftar-barang > tbody");
-      let daftarBarang = await ambilDaftarBarang();
-
-      let nomor = 1
-      let total = 0
-
-      daftarBarang.forEach((data) => {
-        elemenDaftarBarang.append(
-          "<tr>" +
-          "<td>" + nomor + "</td>" +
-          "<td>" + data.item + "</td>" +
-          "<td>" + data.harga + "</td>" +
-          "<td>" + "<a href='#' class='me-2 link-keranjang' data='" + data.id + "' data-nama='" + data.item + "' data-harga='" + data.harga + "'><i class='bi bi-cart-plus'></i></a>" + "</td>" +
-          "</tr>"
-        )
-
-        nomor = nomor + 1
-      })
-       
-   // selesai menampilkan barang di keranjang
- await tampilBarangDiKeranjang()
- 
-      $(".link-keranjang").click(async function() {
-        let idbarang = $(this).attr('data')
-        let nama = $(this).attr('data-nama')
-        let harga = $(this).attr('data-harga')
-        let jumlah = 1
-        let idpelanggan = 'prosee'
-        let namapelanggan = 'proses'
-
-        await tambahBarangKeKeranjang(idbarang, nama, harga, jumlah, idpelanggan, namapelanggan)
-
-        console.log('menambah barang ke keranjang')
-        
-   await tampilBarangDiKeranjang()
-      })
+      await tampilBarangDiKeranjang()
       
-      // menghapus item dari keranjang
-        $("#daftar-keranjang > tbody").on('click', '.link-hapus', async function() {
+     // menghapus item dari keranjang
+    $("#daftar-keranjang > tbody").on('click', '.link-hapus', async function() {
       await hapusBarangDariKeranjang($(this).attr('data'))
     
     // refres 
     location.reload()
       })
+      
+      
+      let elemenDaftarPelanggan = $("#daftar-pelanggan > tbody");
+          let daftarPelanggan = await ambilDaftarPelanggan();
+          
+       
+          let nomor = 1
+          let total = 0
+          daftarPelanggan.forEach((data) => {
+            elemenDaftarPelanggan.append(
+              "<tr>" +
+               "<td>" +  nomor + "</td>" +
+               "<td>" + data.nama + "</td>" +
+               "<td>" + data.alamat + "</td>" +
+               "<td>" + data.nohape + "</td>" +
+               "<td>" + "<a href='#' class='me-2 link-ubah' data='" + data.id + "'>ubah</a><button class='btn btn-danger tombol-hapus' data='" +data.id + "'>hapus</button> "  + "</td>" +
+              "</tr>"
+              )
+              nomor = nomor + 1 
+              
+              $('#total').html("Total Pelanggan :" + (nomor - 1))
+          })
+           
     })
   </script>
 </body>
