@@ -165,19 +165,13 @@ export async function ambilBarangProsesDiKeranjang() {
   return hasilKueri
 }
 
-export async function ubahBarangProsesDiKeranjang(idpelanggan, namapelanggan) {
-  let refDokumen = collection(basisdata, "transaksi")
+export async function ubahBarangProsesDiKeranjang(id, idpelanggan, namapelanggan) {
   
-  //membuat query untuk mencari data yg masih proses 
-  let queryBarangProses = query(refDokumen, where("idpelanggan", "==", "proses"))
-  
-  let snapshotBarang = await getDocs(queryBarangProses)
-  snapshotBarang.forEach(async(dokumen) => {
     await updateDoc(
-      doc(basisdata,"transaksi", dokumen.id),
+      doc(basisdata,"transaksi", id),
       { idpelanggan: idpelanggan, namapelanggan: namapelanggan }
       )
-  })
+    
 }
 
 export async function ambilPelanggan(id) {

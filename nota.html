@@ -27,7 +27,7 @@
       const id = parameterURL.get('id')
       
       // tampilkan nama pelanggan   
-      const pelanggan = await ambilPelanggan()
+      const pelanggan = await ambilPelanggan(id)
       $("#namapelanggan").html(pelanggan.nama)
       
     })
