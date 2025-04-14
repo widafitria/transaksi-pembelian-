@@ -124,4 +124,65 @@ export async function hapusBarangDariKeranjang(id) {
 }
 
 // fungsi ambil daftar pelanggan
-export async function ambilDaftarPelanggan() 
+export async function ambilDaftarPelanggan() {
+  const refDokumen = collection(basisdata, "pelanggan");
+  const kueri = query(refDokumen, orderBy("nama"));
+  const cuplikanKueri = await getDocs(kueri);
+  
+  let hasilKueri = [];
+  cuplikanKueri.forEach((dokumen) => {
+    hasilKueri.push({
+      id: dokumen.id,
+      nama: dokumen.data().nama,
+      alamat: dokumen.data().alamat,
+      nohape: dokumen.data().nohape
+      
+    })
+  })
+  
+  return hasilKueri;
+}
+
+export async function ambilBarangProsesDiKeranjang() {
+  let refDokumen = collection(basisdata, "transaksi")
+  
+  //membuat query untuk mencari data yg masih proses 
+  let queryBarangProses = query(refDokumen, where("idpelanggan", "==", "proses"))
+  
+  let snapshotBarang = await getDocs(queryBarangProses)
+  let hasilKueri = []
+  snapshotBarang.forEach((dokumen) => {
+     hasilKueri.push({
+       id: dokumen.id,
+      nama: dokumen.data().nama,
+      jumlah: dokumen.data().jumlah,
+      harga: dokumen.data().harga,
+      idpelanggan: dokumen.data().idpelanggan,
+      namapelanggan: dokumen.data().namapelanggan
+     })
+  })
+  
+  return hasilKueri
+}
+
+export async function ubahBarangProsesDiKeranjang(idpelanggan, namapelanggan) {
+  let refDokumen = collection(basisdata, "transaksi")
+  
+  //membuat query untuk mencari data yg masih proses 
+  let queryBarangProses = query(refDokumen, where("idpelanggan", "==", "proses"))
+  
+  let snapshotBarang = await getDocs(queryBarangProses)
+  snapshotBarang.forEach((dokumen) => {
+    await updateDoc(
+      doc(basisdata,"transaksi", dokumen.id),
+      { idpelanggan: idpelanggan, namapelanggan: namapelanggan }
+      )
+  })
+}
+
+export async function ambilPelanggan(id) {
+  const refDokumen = await doc(basisdata, "pelanggan", id)
+  const snapshotDokumen = await getDoc(refDokumen)
+  
+  return await snapshotDokumen.data()
+}
